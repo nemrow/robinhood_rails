@@ -17,30 +17,24 @@ class Robinhood
 
   # <<< NOTES
 
-  def initialize(username, password)
-    @username = username
-    @password = password
-    @logged_in = false
-    @errors = []
+  def initialize
   end
 
-  def login
+  def login(username, password)
     raw_response = HTTParty.post(
       endpoints[:login],
-      # "http://requestb.in/v0974bv0",
       body: {
-        'password' => @password,
-        'username'=> @username
+        'password' => password,
+        'username'=> username
       }.as_json,
       headers: headers
     )
     response = JSON.parse(raw_response.body)
     if response["non_field_errors"]
-      @errors << response["non_field_errors"]
+      puts response["non_field_errors"]
       false
     elsif response["token"]
-      headers.merge!({"Authorization" => "Token #{response['token']}"})
-      true
+      puts response['token']
     end
   end
 
@@ -62,9 +56,8 @@ class Robinhood
   def buy(symbol, url, price, quantity)
     raw_response = HTTParty.post(
       endpoints[:orders],
-      # "http://requestb.in/v0974bv0",
       body: {
-        'account' => 'https://api.robinhood.com/accounts/5QU31279/',
+        'account' => "https://api.robinhood.com/accounts/#{ENV['ROBINHOOD_ACCOUNT_NUMBER']}/",
         'instrument' => url,
         'price' => price,
         'quantity' => quantity,
@@ -78,8 +71,22 @@ class Robinhood
     )
   end
 
-  def sell
-
+  def sell(symbol, url, price, quantity)
+    raw_response = HTTParty.post(
+      endpoints[:orders],
+      body: {
+        'account' => "https://api.robinhood.com/accounts/#{ENV['ROBINHOOD_ACCOUNT_NUMBER']}/",
+        'instrument' => url,
+        'price' => price,
+        'quantity' => quantity,
+        'side' => "sell",
+        'symbol' => symbol,
+        'time_in_force' => 'gfd',
+        'trigger' => 'immediate',
+        'type' => 'market'
+      }.as_json,
+      headers: headers
+    )
   end
 
   private
@@ -116,7 +123,8 @@ class Robinhood
       'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',
       'X-Robinhood-API-Version' => '1.0.0',
       'Connection' => 'keep-alive',
-      'User-Agent' => 'Robinhood/823 (iPhone; iOS 7.1.2; Scale/2.00)'
+      'User-Agent' => 'Robinhood/823 (iPhone; iOS 7.1.2; Scale/2.00)',
+      "Authorization" => "Token #{ENV["ROBINHOOD_SECRET_TOKEN"]}"
     }
   end
 end
