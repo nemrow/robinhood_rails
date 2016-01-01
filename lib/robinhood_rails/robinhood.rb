@@ -43,6 +43,11 @@ class Robinhood
     JSON.parse(raw_response.body)
   end
 
+  def orders
+    raw_response = HTTParty.get(endpoints[:orders], headers: headers)
+    JSON.parse(raw_response.body)
+  end
+
   def accounts
     raw_response = HTTParty.get(endpoints[:accounts], headers: headers)
     JSON.parse(raw_response.body)
