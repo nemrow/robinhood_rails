@@ -58,12 +58,12 @@ class Robinhood
     JSON.parse(raw_response.body)
   end
 
-  def buy(symbol, url, price, quantity)
+  def buy(symbol, instrument_id, price, quantity)
     raw_response = HTTParty.post(
       endpoints[:orders],
       body: {
         'account' => "https://api.robinhood.com/accounts/#{ENV['ROBINHOOD_ACCOUNT_NUMBER']}/",
-        'instrument' => url,
+        'instrument' => "https://api.robinhood.com/instruments/#{instrument_id}/",
         'price' => price,
         'quantity' => quantity,
         'side' => "buy",
@@ -76,12 +76,30 @@ class Robinhood
     )
   end
 
-  def sell(symbol, url, price, quantity)
+  def limit_buy(symbol, instrument_id, price, quantity)
     raw_response = HTTParty.post(
       endpoints[:orders],
       body: {
         'account' => "https://api.robinhood.com/accounts/#{ENV['ROBINHOOD_ACCOUNT_NUMBER']}/",
-        'instrument' => url,
+        'instrument' => "https://api.robinhood.com/instruments/#{instrument_id}/",
+        'price' => price,
+        'quantity' => quantity,
+        'side' => "buy",
+        'symbol' => symbol,
+        'time_in_force' => 'gfd',
+        'trigger' => 'immediate',
+        'type' => 'limit'
+      }.as_json,
+      headers: headers
+    )
+  end
+
+  def sell(symbol, instrument_id, price, quantity)
+    raw_response = HTTParty.post(
+      endpoints[:orders],
+      body: {
+        'account' => "https://api.robinhood.com/accounts/#{ENV['ROBINHOOD_ACCOUNT_NUMBER']}/",
+        'instrument' => "https://api.robinhood.com/instruments/#{instrument_id}/",
         'price' => price,
         'quantity' => quantity,
         'side' => "sell",
@@ -89,6 +107,24 @@ class Robinhood
         'time_in_force' => 'gfd',
         'trigger' => 'immediate',
         'type' => 'market'
+      }.as_json,
+      headers: headers
+    )
+  end
+
+  def limit_sell(symbol, instrument_id, price, quantity)
+    raw_response = HTTParty.post(
+      endpoints[:orders],
+      body: {
+        'account' => "https://api.robinhood.com/accounts/#{ENV['ROBINHOOD_ACCOUNT_NUMBER']}/",
+        'instrument' => "https://api.robinhood.com/instruments/#{instrument_id}/",
+        'price' => price,
+        'quantity' => quantity,
+        'side' => "sell",
+        'symbol' => symbol,
+        'time_in_force' => 'gfd',
+        'trigger' => 'immediate',
+        'type' => 'limit'
       }.as_json,
       headers: headers
     )
