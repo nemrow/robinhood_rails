@@ -58,6 +58,11 @@ class Robinhood
     JSON.parse(raw_response.body)
   end
 
+  def quote(symbol)
+    raw_response = HTTParty.post("https://api.robinhood.com/quotes/#{symbol}/", headers: headers)
+    JSON.parse(raw_response.body)
+  end
+
   def buy(symbol, instrument_id, price, quantity)
     raw_response = HTTParty.post(
       endpoints[:orders],
