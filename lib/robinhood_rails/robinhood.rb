@@ -141,6 +141,11 @@ class Robinhood
     raw_response.code == 200
   end
 
+  def positions(instrument_id)
+    raw_response = HTTParty.get("https://api.robinhood.com/accounts/#{ENV['ROBINHOOD_ACCOUNT_NUMBER']}/positions/#{instrument_id}/", headers: headers)
+    JSON.parse(raw_response.body)
+  end
+
   private
 
   def endpoints
