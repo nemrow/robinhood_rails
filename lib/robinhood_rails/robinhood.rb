@@ -54,6 +54,11 @@ class Robinhood
     JSON.parse(raw_response.body)
   end
 
+  def portfolio
+    raw_response = HTTParty.get("https://api.robinhood.com/accounts/#{ENV['ROBINHOOD_ACCOUNT_NUMBER']}/portfolio/", headers: headers)
+    JSON.parse(raw_response.body)
+  end
+
   def instruments(symbol)
     raw_response = HTTParty.get(endpoints[:instruments], query: {'query' => symbol.upcase}, headers: headers)
     JSON.parse(raw_response.body)

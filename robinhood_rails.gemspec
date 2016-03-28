@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = RobinhoodRails::VERSION
   s.authors     = ["Nemrow"]
   s.email       = ["nemrowj@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of RobinhoodRails."
-  s.description = "TODO: Description of RobinhoodRails."
+  s.homepage    = "https://github.com/nemrow/robinhood_rails"
+  s.summary     = "Access robinhood free trading stock platform via API"
+  s.description = "Access robinhood free trading stock platform via API"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
