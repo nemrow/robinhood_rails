@@ -141,6 +141,24 @@ class Robinhood
     )
   end
 
+  def stop_loss_sell(symbol, instrument_id, price, quantity)
+    raw_response = HTTParty.post(
+      endpoints[:orders],
+      body: {
+        'account' => "https://api.robinhood.com/accounts/#{ENV['ROBINHOOD_ACCOUNT_NUMBER']}/",
+        'instrument' => "https://api.robinhood.com/instruments/#{instrument_id}/",
+        'stop_price' => price,
+        'quantity' => quantity,
+        'side' => "sell",
+        'symbol' => symbol,
+        'time_in_force' => 'gfd',
+        'trigger' => 'stop',
+        'type' => 'market'
+      }.as_json,
+      headers: headers
+    )
+  end
+
   def cancel_order(order_id)
     raw_response = HTTParty.post("https://api.robinhood.com/orders/#{order_id}/cancel/", headers: headers)
     raw_response.code == 200
