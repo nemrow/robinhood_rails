@@ -151,7 +151,7 @@ class Robinhood
         'quantity' => quantity,
         'side' => "sell",
         'symbol' => symbol,
-        'time_in_force' => 'gfd',
+        'time_in_force' => 'gtc',
         'trigger' => 'stop',
         'type' => 'market'
       }.as_json,
